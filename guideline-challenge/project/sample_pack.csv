@@ -1,1 +1,14 @@
 sample_id,split,tags,reason
+LISA01,example,normal;critical,Ví dụ cụm đèn nhiều đầu đèn và đèn rẽ trái tại giao lộ
+LISA02,example,normal,Ví dụ đèn đỏ giao lộ trực diện góc nhìn rõ
+LISA03,example,normal,Ví dụ tiếp cận giao lộ với các đầu đèn trên giá treo
+LISA05,calibration,normal;edge,Thử nghiệm nhận diện cụm đèn và thanh treo phức tạp
+LISA08,calibration,normal,Thử nghiệm phân định instance từng thân đèn độc lập
+LISA10,calibration,ambiguity;edge,Thử nghiệm relevance khi chưa rõ hướng làn
+LISA15,calibration,critical;conflict,Thử nghiệm đọc state khi chuyển pha tín hiệu
+LISA20,calibration,edge;normal,Thử nghiệm direction đèn tròn non_directional vs mũi tên
+LISA30,calibration,small_far;edge,Thử nghiệm ngưỡng kích thước 5px đầu đèn nhỏ xa
+LISA14,blind,normal;critical,Blind set: Toàn bộ đèn đỏ tại giao lộ hiện tại
+LISA16,blind,edge;critical,Blind set: Pha chuyển tiếp hỗn hợp tròn xanh mũi tên đỏ
+LISA22,blind,normal;edge,Blind set: Xe di chuyển gần giao lộ góc nhìn lệch
+LISA27,blind,edge;ambiguity,Blind set: Xe tiếp cận sát giao lộ có đèn nhỏ hậu cảnh
