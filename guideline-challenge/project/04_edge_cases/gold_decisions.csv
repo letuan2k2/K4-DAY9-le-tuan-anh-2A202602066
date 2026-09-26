@@ -1,1 +1,14 @@
-sample_id,decision_id,expected,severity,rationale
+﻿sample_id,decision_id,expected,severity,rationale
+LISA06,d1,label=traffic_light for every clearly identifiable vehicle traffic-light housing with both visible box dimensions >5 px,major,Theo guideline v2: mỗi vỏ đèn là một object; không gộp nhiều đầu đèn và bỏ qua vật thể không đạt ngưỡng kích thước.
+LISA06,d2,state=red for the clearly visible main circular signals,critical,Các tín hiệu tròn chính đang phát sáng đỏ rõ; state sai có thể làm downstream hiểu sai quyết định dừng/đi.
+LISA06,d3,direction=left for the visible left-arrow signal and non_directional for visible circular signals,major,Direction mô tả biểu tượng trên mặt đèn; đèn tròn không được gán straight.
+LISA06,d4,geometry: each box tightly encloses only the visible traffic-light housing and excludes pole/crossbar/background,minor,"Geometry phải ôm sát vỏ đèn nhìn thấy, không chứa cột hoặc thanh treo."
+LISA07,d1,label=traffic_light for every clearly identifiable vehicle traffic-light housing with both visible box dimensions >5 px,major,Frame có nhiều đầu đèn ở các kích thước khác nhau; vẫn phải giữ từng instance độc lập nếu đủ điều kiện LABEL.
+LISA07,d2,state=red for the clearly visible main signals,critical,Màu đỏ của các tín hiệu chính nhìn thấy rõ; lỗi state là lỗi downstream mức critical.
+LISA07,d3,relevance=relevant for traffic lights belonging to the current intersection when lane direction is not clearly determined,major,"Theo rule v2, khi chưa rõ hướng làn thì các đèn đủ điều kiện thuộc giao lộ hiện tại được gán relevant."
+LISA25,d1,state=red for the visible left-arrow signal,critical,Mũi tên trái vẫn đỏ trong khi các tín hiệu tròn chính đã chuyển xanh; đây là case mixed-state quan trọng.
+LISA25,d2,state=green for the clearly visible main circular signals,critical,Các tín hiệu tròn chính đang xanh rõ; cần giữ độc lập với mũi tên trái màu đỏ.
+LISA25,d3,direction=left for the arrow housing and non_directional for circular housings,major,"Không được suy direction từ vị trí; chỉ mũi tên nhìn rõ mới gán left, tín hiệu tròn là non_directional."
+LISA26,d1,state=red for the visible left-arrow signal and green for the clearly visible main circular signals,critical,Frame tiếp tục thể hiện mixed-state; cần gán từng đầu đèn theo bằng chứng trên frame hiện tại.
+LISA26,d2,relevance=relevant for clearly identifiable traffic lights belonging to the current intersection when lane direction is not clearly determined,major,Áp dụng rule relevance của guideline v2 cho cùng giao lộ hiện tại.
+LISA26,d3,geometry: small/far traffic lights are labeled only when confidently identifiable and both visible box dimensions are >5 px,major,Ngăn việc nới box để vượt ngưỡng và giảm false positive ở các đầu đèn nhỏ xa.
