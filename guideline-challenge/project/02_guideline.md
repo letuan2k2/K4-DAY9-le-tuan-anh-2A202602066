@@ -179,17 +179,21 @@ Mỗi ảnh LISA được gán nhãn độc lập. Không xem ảnh trước ho�
 
 Tất cả thuộc tính đặt `mutable=false`, nghĩa là thuộc tính được gán cố định cho từng box. Project dùng Shape trên từng ảnh và không tạo Track theo dõi đèn qua chuỗi ảnh.
 
-## 9. Examples — Ví dụ
+## 9. Examples + Edge case
 
-Các ảnh dưới đây được dùng làm ví dụ chuyên môn. Trước khi chốt bộ đáp án, ảnh dùng chính thức phải thuộc nhóm `example` hoặc `calibration` trong `sample_pack.csv`, không được đồng thời thuộc nhóm `blind` dành cho kiểm tra độc lập.
+![Minh họa gán nhãn ví dụ](screenshot_examples.png)
 
-| sample_id | Thấy gì | Expected output | Rule áp dụng |
+Các ví dụ và tình huống biên (Edge cases) giúp người gán nhãn xử lý chính xác các trường hợp đặc biệt:
+
+| Mã | Tình huống (Edge Case) | Quyết định gán nhãn | Lý do / Ý nghĩa |
 |---|---|---|---|
-| LISA01 | Đèn mũi tên trái đỏ và các đèn tròn đỏ có thân riêng tại cùng giao lộ; không rõ làn của xe mang camera được đi hướng nào. | Mỗi thân đèn một box; `state=red`; mũi tên `direction=left`, đèn tròn `direction=non_directional`; các đèn thuộc giao lộ hiện tại `relevance=relevant`; `review=none`. | Mục 2, 4.1–4.3 |
-| LISA15 | Ảnh gần thời điểm chuyển trạng thái; một tín hiệu có thể khó đọc chắc màu. | Nếu xác nhận được đầu đèn và kích thước hợp lệ thì LABEL; tín hiệu không đọc chắc dùng `state=unknown`; nếu thấy màu xung đột thì `review=escalate`. | Mục 6–8 |
-| LISA16 | Đèn tròn đã xanh nhưng đầu đèn mũi tên trái vẫn đỏ. | Hai box riêng: `green/non_directional` và `red/left`; không gán một state chung cho cả cụm. | Mục 2, 4.1–4.2 |
-| LISA20 | Có đầu đèn rõ và các đầu đèn nhỏ/xa trong cùng ảnh. | Đèn nhận diện được với hai cạnh >5 px được LABEL; thuộc tính không đọc được dùng `unknown`; đối tượng không đạt ngưỡng bị IGNORE. | Mục 3, 5–6 |
-| LISA30 | Có các điểm sáng rất nhỏ ở xa, không đủ hình dạng hoặc kích thước. | Không tạo box cho đối tượng không xác nhận được hoặc có một cạnh ≤5 px; không nới box lấy nền. | Mục 3, 5 |
+| **EC-1** | **Đèn quá nhỏ / xa** (Ví dụ: box `5 × 15 px` hoặc `5 × 5 px`) | **IGNORE** (Bỏ qua, không gán nhãn). | Có chiều rộng `≤ 5 px`, dữ liệu quá mờ để model học chính xác; tránh gán nhãn phỏng đoán. |
+| **EC-2** | **Đốm sáng lóa lớn** (Ví dụ: đốm sáng `12 × 12 px` do đèn đường hoặc phản chiếu ban đêm) | **IGNORE** (Bỏ qua). | Kích thước `> 5 px` nhưng không có bằng chứng hình ảnh là đầu đèn xe cơ giới. |
+| **EC-3** | **Đèn bị che khuất hoặc cắt ở mép ảnh** | Vẽ ôm sát phần nhìn thấy; **chỉ giữ lại nếu cả 2 cạnh > 5 px**. | Không suy đoán phần bị che khuất (tránh noise cho bounding box regression). |
+| **EC-4** | **Đèn tắt toàn bộ (Off)** | Gán `state=off`, `direction` theo biểu tượng mặt đèn (nếu thấy). | Cần phân biệt rõ với `unknown` (chỉ dùng `unknown` khi mờ/lóa không đọc được, còn `off` là thấy rõ đèn đang tắt). |
+| **EC-5** | **Ảnh thiếu thông tin làn đường xe chạy** (Không rõ xe sắp đi thẳng hay rẽ) | Đánh `relevance=relevant` cho **toàn bộ đèn ở giao lộ hiện tại**. | Quy ước thống nhất để tránh việc mỗi annotator đoán một kiểu gây lệch nhãn nội bộ. |
+| **EC-6** | **Cụm đèn phức tạp** (1 đèn tròn xanh đi thẳng + 1 đèn mũi tên đỏ rẽ trái cạnh nhau) | **Tách thành 2 box riêng biệt**: 1 box `green / non_directional` và 1 box `red / left`. | Tuân thủ nguyên tắc: Mỗi vỏ đèn độc lập là 1 object riêng biệt. |
+| **EC-7** | **Đèn lỗi tín hiệu / ánh sáng bất thường** (Nhiều màu cùng sáng hoặc chập chờn) | Chọn `state=unknown` + **`review=escalate`**. | Đẩy lên QA review, không để annotator tự suy đoán đáp án theo cảm tính. |
 
 ## 10. Common mistakes — Lỗi thường gặp
 
@@ -205,3 +209,15 @@ Các ảnh dưới đây được dùng làm ví dụ chuyên môn. Trước khi
 10. **Bỏ qua quy tắc `relevance` của v2:** khi không rõ hướng làn, mọi đèn thuộc giao lộ hiện tại đều là `relevant`.
 11. **Dùng ảnh trước/sau để suy ảnh hiện tại:** mỗi ảnh LISA phải được xử lý độc lập.
 12. **Không chuyển kiểm tra khi bằng chứng xung đột:** chọn thuộc tính `unknown` và `review=escalate` để quyết định được lưu trong file kết quả xuất từ CVAT.
+
+## 11. Checklist ngắn gọn trước khi hoàn thành ảnh
+
+Mỗi khi gán nhãn xong 1 ảnh, kiểm tra nhanh 5 bước sau:
+
+- [ ] **1. Đúng Scope & Ngưỡng size:** Chỉ gán nhãn đèn xe cơ giới. Cả 2 cạnh box đều **$> 5\text{ px}$** trên ảnh gốc (bỏ qua nếu $\le 5\text{ px}$).
+- [ ] **2. Chuẩn Geometry:** 1 thân/vỏ đèn độc lập = 1 box. Box ôm sát phần nhìn thấy (gồm mái che/bezel); tuyệt đối không dính cột, dây treo hay background thừa.
+- [ ] **3. Thuộc tính `state`:** `red`/`yellow`/`green` (đang sáng); `off` (thấy rõ tắt hoàn toàn); `unknown` (mờ/lóa/xa). Không đoán màu theo vị trí bóng.
+- [ ] **4. Thuộc tính `direction` & `relevance`:** 
+  - Đèn tròn gán `non_directional` (không gán nhầm sang `straight`).
+  - Chưa rõ hướng làn ego $\rightarrow$ gán `relevant` cho tất cả đèn hợp lệ ở giao lộ hiện tại.
+- [ ] **5. Xử lý nghi ngờ:** Bằng chứng xung đột / lỗi tín hiệu / không rõ giao lộ $\rightarrow$ chọn `unknown` kèm `review=escalate`. Không tự đoán.
