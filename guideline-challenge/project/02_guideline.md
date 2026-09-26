@@ -1,6 +1,6 @@
 # Annotation guideline — Trạng thái và mức độ liên quan của đèn giao thông
 
-**Version:** v2
+**Version:** v3
 
 ## 1. Mục tiêu và phạm vi
 
@@ -100,7 +100,10 @@ Không cần chọn `unknown` hay yêu cầu kiểm tra lại chỉ vì chưa r�
 
 Để xác định, quan sát vạch đường, mũi tên trên làn, vị trí và hướng quay của đầu đèn, cùng bố cục giao lộ. Không chọn `relevance` chỉ vì đèn đang xanh, đỏ hoặc nằm bên trái hay bên phải ảnh.
 
-Lưu ý: với quy ước ở trường hợp 1, `relevant` chưa có nghĩa đèn chắc chắn điều khiển xe mang camera. Bộ nhãn hiện tại không ghi riêng lý do chọn `relevant`, nên chỉ dựa vào thuộc tính này và màu đèn thì chưa đủ để quyết định xe phải đi hay dừng.
+**Tiêu chí phân biệt giao lộ hiện tại và giao lộ phía xa (bổ sung v3):**
+- *Giao lộ hiện tại:* Cụm đèn treo trên cùng kết cấu gantry hoặc cột chính mà xe camera đang tiếp cận trực diện; có vạch dừng hoặc kết nối trực tiếp với làn xe camera.
+- *Giao lộ phía xa:* Đèn nằm sau nút giao hiện tại (cách một quãng đường xa), kích thước nhỏ hẳn và thuộc hệ thống cột riêng của nút giao kế tiếp. Nếu chắc chắn là giao lộ phía xa và không điều khiển xe: gán `not_relevant`.
+- *Nếu không đủ bằng chứng phân biệt giao lộ:* Chọn `relevance=unknown` và đặt `review=escalate`.
 
 ### 4.4. Yêu cầu kiểm tra lại `review`
 
@@ -108,6 +111,8 @@ Lưu ý: với quy ước ở trường hợp 1, `relevant` chưa có nghĩa đ�
 - `escalate`: cần người phụ trách xem lại vì các dấu hiệu trong ảnh không thống nhất, hướng dẫn chưa nói rõ cách xử lý hoặc không có giá trị phù hợp để chọn.
 
 Ví dụ cần chuyển kiểm tra (`escalate`): nhiều màu cùng sáng; nhiều hướng đồng thời trên một đầu đèn; không xác định được đèn thuộc giao lộ hiện tại hay giao lộ phía xa.
+
+*Lưu ý từ phản hồi của nhóm peer (Team02):* Giá trị mặc định là `none`. Khi annotator chọn `unknown` cho bất kỳ thuộc tính nào, hãy luôn chủ động kiểm tra xem case đó có xung đột cần chuyển `review=escalate` hay không, tránh thói quen bỏ qua cờ này vì đã có giá trị mặc định.
 
 Không tự thêm nhãn hoặc giá trị mới. Hãy ghi lại vấn đề để người phụ trách kiểm tra. Nếu đối tượng không đủ điều kiện gán nhãn, bỏ qua; khi cần trao đổi, ghi vào phần câu hỏi của nhóm thay vì tạo box chỉ để đặt `review=escalate`.
 

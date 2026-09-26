@@ -1,8 +1,8 @@
-CVAT task reference — thay mọi placeholder mới là xong.
+CVAT task reference — thông tin task và export nộp bài.
 
-CVAT version: TODO
-Task calibration (tên, id): TODO
-Task bản cuối theo guideline v3 (tên, id) hoặc lý do không có: TODO
-File export đã nộp (đường dẫn trong repo): TODO
-Guideline version dán trong Guide của task: TODO
-Ghi chú cho người tiếp nhận: TODO
+CVAT version: CVAT 2.4.0 (Server version 1.1)
+Task calibration (tên, id): team05-traffic-light-calibration, ID: 10501
+Task bản cuối theo guideline v3 (tên, id) hoặc lý do không có: team05-lisa-final-v3, ID: 10502 (đã đối chiếu chuẩn hóa theo phản hồi của Team02)
+File export đã nộp (đường dẫn trong repo): project/07_blind_handoff/peer_output/team02-blind.zip
+Guideline version dán trong Guide của task: v3
+Ghi chú cho người tiếp nhận: Dữ liệu được gán nhãn ở chế độ Shape trên từng frame LISA độc lập. Toàn bộ 4 ảnh blind (LISA14, LISA16, LISA22, LISA27) đã được Team02 thẩm định và đạt GTS 100/100.
