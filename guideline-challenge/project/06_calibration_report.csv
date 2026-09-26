@@ -1,1 +1,5 @@
 sample_id,item,values_by_annotator,diagnosis,action,rule_change
+LISA10,relevance của các đầu đèn thuộc giao lộ hiện tại,A=chỉ đèn trung tâm relevant;B=tất cả đèn cùng giao lộ relevant,guideline_gap,revise_rule,"Khi không rõ hướng đi của làn xe, gán relevance=relevant cho tất cả đầu đèn đủ điều kiện thuộc giao lộ hiện tại"
+LISA15,state của đầu đèn tròn trung tâm,A=red;B=unknown,guideline_gap,revise_rule,"Nếu không xác định chắc một màu đang sáng thì dùng state=unknown; nếu có bằng chứng màu xung đột thì đặt review=escalate"
+LISA20,direction của đầu đèn tròn,A=straight;B=non_directional,guideline_gap,revise_rule,"Đèn tròn không có mũi tên được gán direction=non_directional; straight chỉ dùng khi nhìn rõ mũi tên đi thẳng"
+LISA30,đầu đèn rất nhỏ ở xa,A=LABEL;B=IGNORE,data_ambiguity,add_example,"Chỉ label khi xác nhận được là đầu đèn và cả chiều rộng lẫn chiều cao của box đều lớn hơn 5 px trên ảnh gốc"
