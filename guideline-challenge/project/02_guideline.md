@@ -11,7 +11,7 @@ Tài liệu này hướng dẫn cách khoanh vùng đèn giao thông dành cho x
 - **Đầu đèn:** một cụm đèn có thân/vỏ bao quanh riêng, có thể chứa nhiều bóng đỏ, vàng và xanh.
 - **Giao lộ hiện tại:** giao lộ mà xe mang camera đang tiếp cận hoặc đang đi qua; không bao gồm giao lộ tiếp theo ở phía xa.
 
-Chỉ gán nhãn đèn dành cho xe nhìn thấy trực tiếp. Bỏ qua đèn cho người đi bộ, phản chiếu, hình đèn trên biển quảng cáo/màn hình, cột, thanh treo và dây điện.
+Chỉ gán nhãn đèn dành cho xe nhìn thấy trực tiếp. Bỏ qua đèn cho người đi bộ, phản chiếu, hình đèn trên biển quảng cáo/màn hình, cột, thanh treo, dây điện và đèn cảnh báo vàng nhấp nháy đơn lẻ trên biển báo/rào chắn.
 
 ## 2. Annotation unit — Đơn vị gán nhãn
 
@@ -133,6 +133,7 @@ Vẫn gán nhãn khi đèn bị che một phần, bị cắt ở mép ảnh ho�
 Không tạo box cho:
 
 - đèn tín hiệu dành cho người đi bộ;
+- đèn cảnh báo vàng nhấp nháy đơn lẻ (warning beacon) gắn trên biển báo hoặc rào chắn công trường;
 - ánh phản chiếu hoặc vùng sáng không xác nhận được là đầu đèn;
 - đèn xuất hiện trên biển quảng cáo, màn hình hoặc hình ảnh khác;
 - cột, thanh treo, dây điện và biển báo;
