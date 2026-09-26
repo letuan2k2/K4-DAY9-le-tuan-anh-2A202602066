@@ -166,18 +166,13 @@ Không tự thêm nhãn hoặc giá trị mới. Các trường hợp sau phải
 
 Riêng việc không rõ làn xe được đi hướng nào đã có quy tắc ở mục 4.3: tất cả đầu đèn thuộc giao lộ hiện tại được gán `relevance=relevant`, không cần chuyển kiểm tra chỉ vì thiếu thông tin hướng làn.
 
-## 8. Temporal rule — Quy tắc giữa các ảnh
+## 8. Temporal rule — Quy tắc ngữ cảnh chuỗi ảnh (Temporal Context)
 
-**Không áp dụng theo dõi đối tượng — nhiệm vụ này dùng ảnh tĩnh.**
+Mỗi ảnh LISA vẫn được tạo bounding box độc lập ở chế độ **Shape** (không dùng Track). Tuy nhiên, **người gán nhãn ĐƯỢC PHÉP sử dụng ngữ cảnh (context) từ các frame liền trước trong video** để hỗ trợ ra quyết định:
 
-Mỗi ảnh LISA được gán nhãn độc lập. Không xem ảnh trước hoặc sau để:
-
-- xác nhận một vùng mờ là đèn giao thông;
-- suy ra `state`, đặc biệt tại thời điểm chuyển đỏ–xanh;
-- suy ra `direction` hoặc `relevance`;
-- duy trì cùng một box hay ID giữa các ảnh.
-
-Tất cả thuộc tính đặt `mutable=false`, nghĩa là thuộc tính được gán cố định cho từng box. Project dùng Shape trên từng ảnh và không tạo Track theo dõi đèn qua chuỗi ảnh.
+- **Hỗ trợ xác nhận vật thể:** Được đối chiếu các frame trước khi xe ở góc nhìn rõ hơn để xác nhận một vật thể đang mờ/bị che ở frame hiện tại có phải là đầu đèn hay không (vẫn tuân thủ ngưỡng kích thước > 5 px trên frame hiện tại).
+- **Hỗ trợ đọc trạng thái và hướng biểu tượng:** Có thể tham khảo trạng thái ổn định ở frame trước để hỗ trợ suy luận khi frame hiện tại bị lóa tạm thời hoặc rung mờ (motion blur). *Lưu ý: tại thời điểm đèn đang chuyển trạng thái (nhấp nháy hoặc đổi màu), phải ưu tiên bằng chứng thực tế nhìn thấy trên frame hiện tại.*
+- **Tính độc lập của annotation:** Mặc dù được tham khảo context, việc vẽ bounding box và gán thuộc tính vẫn phải phản ánh đúng kích thước và mức độ hiển thị thực tế của frame hiện tại (`mutable=false`). Không copy nguyên trạng box nếu ở frame hiện tại đèn đã bị che khuất hoặc ra khỏi khung hình.
 
 ## 9. Examples + Edge case
 
@@ -207,7 +202,7 @@ Các ví dụ và tình huống biên (Edge cases) giúp người gán nhãn x�
 8. **Gán đèn tròn là `straight`:** đèn tròn dùng `non_directional`; `straight` chỉ khi nhìn rõ mũi tên đi thẳng.
 9. **Gán `direction` theo vị trí trái/phải trong ảnh:** `direction` mô tả biểu tượng trên đèn.
 10. **Bỏ qua quy tắc `relevance` của v2:** khi không rõ hướng làn, mọi đèn thuộc giao lộ hiện tại đều là `relevant`.
-11. **Dùng ảnh trước/sau để suy ảnh hiện tại:** mỗi ảnh LISA phải được xử lý độc lập.
+11. **Lạm dụng context để vẽ box không tồn tại ở frame hiện tại:** chỉ tham khảo frame trước để xác định vật thể hoặc đọc thuộc tính bị mờ; không copy box nếu ở frame hiện tại đèn đã khuất hoặc ra khỏi ảnh.
 12. **Không chuyển kiểm tra khi bằng chứng xung đột:** chọn thuộc tính `unknown` và `review=escalate` để quyết định được lưu trong file kết quả xuất từ CVAT.
 
 ## 11. Checklist ngắn gọn trước khi hoàn thành ảnh
