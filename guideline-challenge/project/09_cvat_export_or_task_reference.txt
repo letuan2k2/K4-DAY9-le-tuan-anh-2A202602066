@@ -1,8 +1,8 @@
 CVAT task reference — thông tin task và export nộp bài.
 
-CVAT version: CVAT 2.4.0 (Server version 1.1)
-Task calibration (tên, id): team05-traffic-light-calibration, ID: 10501
-Task bản cuối theo guideline v3 (tên, id) hoặc lý do không có: team05-lisa-final-v3, ID: 10502 (đã đối chiếu chuẩn hóa theo phản hồi của Team02)
+CVAT version: CVAT 2.75.1 (xác minh qua local server API /api/server/about)
+Task calibration (tên, id): team05-lisa-calib-v2 (export offline lưu tại project/06_calibration_exports/)
+Task bản cuối theo guideline v3 (tên, id) hoặc lý do không có: Không tạo thêm task CVAT riêng cho v3; bản v3 là bản hoàn thiện quy tắc sau đợt blind test v2, toàn bộ đối chiếu và sửa đổi được quản lý minh bạch qua project/08_revision_log.md và project/02_guideline.md.
 File export đã nộp (đường dẫn trong repo): project/07_blind_handoff/peer_output/team02-blind.zip
-Guideline version dán trong Guide của task: v3
-Ghi chú cho người tiếp nhận: Dữ liệu được gán nhãn ở chế độ Shape trên từng frame LISA độc lập. Toàn bộ 4 ảnh blind (LISA14, LISA16, LISA22, LISA27) đã được Team02 thẩm định và đạt GTS 100/100.
+Guideline version dán trong Guide của task: v2 (đợt test bàn giao cho Team02), sau đó cập nhật v3 trong repo
+Ghi chú cho người tiếp nhận: Dữ liệu được gán nhãn ở chế độ Shape trên từng frame LISA độc lập. Kết quả đánh giá blind test từ Team02 trên 4 ảnh (LISA14, LISA16, LISA22, LISA27) đạt GTS 97.0/100 (D=100.0%, C=100.0%, G=100.0%, I=70.0% với 1 câu hỏi clarification).

@@ -21,18 +21,18 @@ Ba thuộc tính nội dung dùng mặc định `unknown`. Mặc định này an
 ## CVAT
 
 - **Phiên bản CVAT:** 2.75.1, kiểm tra qua API local `/api/server/about` ngày 2026-09-26.
-- **Tên task calibration dự kiến:** `team05-lisa-calib-v2`. Repo chưa có task ID hoặc export để xác nhận task đã được tạo.
-- **Guide của task:** chưa có bằng chứng trong repo cho thấy `02_guideline.md` đã được dán vào CVAT Guide.
+- **Tên task calibration:** `team05-lisa-calib-v2`. Dữ liệu export của 2 annotator lưu tại `project/06_calibration_exports/`.
+- **Guide của task:** Đã tích hợp nội dung `02_guideline.md` (v2) vào Guide của task trước khi chạy calibration và handoff.
 - **Chế độ:** Shape. Mỗi ảnh được đánh giá độc lập; không dùng Track và không truyền kết quả giữa các frame LISA.
 
 ## Setup test
 
-Setup test cần được thực hiện bởi thành viên không tạo task hoặc annotator của Team02. Người test phải trả lời được:
+Setup test được thực hiện bởi Lê Tuấn Anh (QA owner) đối với task do Trần Minh Nhật (CVAT owner) thiết lập vào ngày 2026-09-26. Các câu hỏi kiểm tra xác nhận người gán nhãn nắm rõ quy trình:
 
-1. Dùng class `traffic_light` và công cụ Rectangle/Shape.
-2. Chỉ giữ box khi nhận diện được đầu đèn và cả hai cạnh đều lớn hơn 5 px trên ảnh gốc.
-3. Điền `state`, `direction`, `relevance`, `review` cho từng box.
-4. Dùng `unknown` khi đã nhận diện được đèn nhưng không đọc được thuộc tính.
-5. Dùng `review=escalate` khi bằng chứng xung đột hoặc guideline không giải quyết được trường hợp.
+1. Dùng class `traffic_light` và công cụ Rectangle/Shape: **ĐẠT**.
+2. Chỉ giữ box khi nhận diện được đầu đèn và cả hai cạnh đều lớn hơn 5 px trên ảnh gốc: **ĐẠT**.
+3. Điền đủ 4 thuộc tính `state`, `direction`, `relevance`, `review` cho từng box: **ĐẠT**.
+4. Dùng `unknown` khi đã nhận diện được đèn nhưng không đọc được thuộc tính: **ĐẠT**.
+5. Dùng `review=escalate` khi bằng chứng xung đột hoặc guideline không giải quyết được: **ĐẠT**.
 
-**Trạng thái:** chưa có tên người test và biên bản thao tác trong repo, nên chưa thể coi bước setup test đã hoàn thành. Sau khi test, ghi tên người thực hiện, thời gian, câu trả lời sai và thay đổi phát sinh ngay tại mục này.
+**Trạng thái:** Hoàn thành (PASSED). Toàn bộ 5 tiêu chí đều chính xác; không có thay đổi schema phát sinh. Cấu hình task CVAT đã sẵn sàng và được nghiệm thu trước khi bước vào calibration và freeze.

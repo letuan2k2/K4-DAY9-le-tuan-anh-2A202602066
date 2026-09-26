@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<annotations>
+  <version>1.1</version>
+  <meta>
+    <task>
+      <id>calib-task-b</id>
+      <name>team05-lisa-calib-v2</name>
+      <size>6</size>
+      <mode>annotation</mode>
+      <start_frame>0</start_frame>
+      <stop_frame>5</stop_frame>
+      <owner><username>mbanghia2009</username></owner>
+    </task>
+  </meta>
+  <image id="0" name="LISA05.jpg" width="1280" height="960">
+    <box label="traffic_light" source="manual" occluded="0" xtl="560.0" ytl="210.0" xbr="585.0" ybr="265.0" z_order="0">
+      <attribute name="state">green</attribute>
+      <attribute name="relevance">relevant</attribute>
+      <attribute name="direction">non_directional</attribute>
+      <attribute name="review">none</attribute>
+    </box>
+    <box label="traffic_light" source="manual" occluded="0" xtl="710.0" ytl="215.0" xbr="735.0" ybr="270.0" z_order="0">
+      <attribute name="state">green</attribute>
+      <attribute name="relevance">relevant</attribute>
+      <attribute name="direction">non_directional</attribute>
+      <attribute name="review">none</attribute>
+    </box>
+  </image>
+  <image id="1" name="LISA08.jpg" width="1280" height="960">
+    <box label="traffic_light" source="manual" occluded="0" xtl="530.0" ytl="180.0" xbr="555.0" ybr="235.0" z_order="0">
+      <attribute name="state">green</attribute>
+      <attribute name="relevance">relevant</attribute>
+      <attribute name="direction">non_directional</attribute>
+      <attribute name="review">none</attribute>
+    </box>
+    <box label="traffic_light" source="manual" occluded="0" xtl="680.0" ytl="185.0" xbr="705.0" ybr="240.0" z_order="0">
+      <attribute name="state">green</attribute>
+      <attribute name="relevance">relevant</attribute>
+      <attribute name="direction">non_directional</attribute>
+      <attribute name="review">none</attribute>
+    </box>
+  </image>
+  <image id="2" name="LISA10.jpg" width="1280" height="960">
+    <box label="traffic_light" source="manual" occluded="0" xtl="620.0" ytl="220.0" xbr="645.0" ybr="275.0" z_order="0">
+      <attribute name="state">green</attribute>
+      <attribute name="relevance">relevant</attribute>
+      <attribute name="direction">non_directional</attribute>
+      <attribute name="review">none</attribute>
+    </box>
+    <box label="traffic_light" source="manual" occluded="0" xtl="780.0" ytl="225.0" xbr="805.0" ybr="280.0" z_order="0">
+      <attribute name="state">green</attribute>
+      <attribute name="relevance">relevant</attribute>
+      <attribute name="direction">non_directional</attribute>
+      <attribute name="review">none</attribute>
+    </box>
+  </image>
+  <image id="3" name="LISA15.jpg" width="1280" height="960">
+    <box label="traffic_light" source="manual" occluded="0" xtl="650.0" ytl="200.0" xbr="675.0" ybr="260.0" z_order="0">
+      <attribute name="state">unknown</attribute>
+      <attribute name="relevance">relevant</attribute>
+      <attribute name="direction">non_directional</attribute>
+      <attribute name="review">none</attribute>
+    </box>
+  </image>
+  <image id="4" name="LISA20.jpg" width="1280" height="960">
+    <box label="traffic_light" source="manual" occluded="0" xtl="640.0" ytl="190.0" xbr="665.0" ybr="250.0" z_order="0">
+      <attribute name="state">green</attribute>
+      <attribute name="relevance">relevant</attribute>
+      <attribute name="direction">non_directional</attribute>
+      <attribute name="review">none</attribute>
+    </box>
+  </image>
+  <image id="5" name="LISA30.jpg" width="1280" height="960">
+  </image>
+</annotations>
