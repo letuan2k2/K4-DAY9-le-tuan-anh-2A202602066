@@ -1,423 +1,139 @@
-# Annotation guideline — Traffic-Light State & Ego Relevance
+# Hướng dẫn gán nhãn đèn giao thông
 
-**Version:** v1
+**Version:** v2
 
-## 1. Objective + scope
+## 1. Mục tiêu và phạm vi
 
-Mục tiêu của annotation là xác định các **vehicle traffic signal head** nhìn thấy trong ảnh road scene, trạng thái tín hiệu của chúng và mức độ liên quan với hướng di chuyển của ego vehicle.
+Tài liệu này hướng dẫn cách khoanh vùng đèn giao thông dành cho xe và điền các thông tin đi kèm: đèn đang sáng màu gì, có mũi tên chỉ hướng nào và có liên quan đến xe mang camera hay không.
 
-Guideline phục vụ bài toán perception cho hệ thống hỗ trợ lái/xe tự hành, trong đó model không chỉ cần phát hiện traffic light mà còn phải phân biệt tín hiệu nào có khả năng điều khiển ego vehicle.
+- **Xe camera (ego):** xe mang camera chụp ảnh.
+- **Làn xe:** phần đường dành cho một dòng xe di chuyển.
+- **Đầu đèn:** một vỏ đèn độc lập, có thể chứa nhiều bóng đỏ, vàng, xanh.
+- **Giao lộ hiện tại:** giao lộ xe camera đang tiếp cận hoặc đang đi qua trong ảnh; không bao gồm giao lộ tiếp theo ở phía xa.
 
-### Trong scope
+Chỉ gán nhãn đèn dành cho xe nhìn thấy trực tiếp. Bỏ qua đèn cho người đi bộ, phản chiếu, hình đèn trên biển quảng cáo/màn hình, cột, thanh treo và dây điện.
 
-Label một object khi:
+## 2. Cách khoanh vùng đèn
 
-- có đủ bằng chứng thị giác để xác nhận đó là **vehicle traffic signal head**;
-- object nhìn thấy trực tiếp trong road scene;
-- có thể tạo bounding box cho phần signal head nhìn thấy được.
+Dùng công cụ **Rectangle**, chế độ **Shape**, để vẽ khung chữ nhật (box) quanh từng đầu đèn trong ảnh.
 
-### Ngoài scope
+**Một đầu đèn có vỏ riêng = một đối tượng `traffic_light`.**
 
-Không label:
+- Một vỏ chứa ba bóng đỏ–vàng–xanh: một box.
+- Đèn tròn và đèn mũi tên có hai vỏ riêng: hai box.
+- Nhiều đầu đèn trên cùng thanh treo: mỗi đầu đèn có box riêng.
 
-- pedestrian traffic signals;
-- reflection/phản chiếu của traffic light;
-- traffic light xuất hiện trong billboard, màn hình hoặc hình ảnh khác;
-- pole, mast, gantry hoặc dây treo nếu không phải signal head;
-- object quá nhỏ/mờ đến mức không thể xác nhận đó là traffic light;
-- tín hiệu giao thông khác không thuộc vehicle traffic light.
+Vẽ khung sát phần đầu đèn nhìn thấy được, bao gồm cả mái che hoặc viền đèn nếu nhìn rõ. Không khoanh cả cột, thanh treo, dây điện hay khoảng nền xung quanh. Không vẽ thêm phần đèn đang bị che.
 
-Không suy đoán object chỉ vì vị trí của nó “có vẻ giống nơi đặt đèn giao thông”.
+Nếu đèn bị cắt ở mép ảnh, box dừng tại mép ảnh. Nếu đèn bị che, chỉ bao phần nhìn thấy. Cả hai trường hợp vẫn phải đáp ứng mục 3.
 
----
+## 3. Khi nào gán nhãn, khi nào bỏ qua?
 
-## 2. Annotation unit
+**Gán nhãn khi bạn nhận ra chắc chắn đó là đèn giao thông dành cho xe và khung bao quanh phần đèn nhìn thấy có cả chiều rộng lẫn chiều cao lớn hơn 5 pixel (px).**
 
-**Annotation unit:** một ảnh tĩnh.
+Bỏ qua nếu đèn quá nhỏ, có một chiều bằng hoặc nhỏ hơn 5 px. Cũng bỏ qua những vùng quá mờ, chỉ thấy một đốm sáng mà không chắc đó là đèn giao thông, dù vùng đó lớn hơn 5 px.
 
-**Object unit:** một **traffic signal head/housing độc lập**.
+Ví dụ: khung 6 × 12 px có thể gán nhãn nếu nhận ra được đầu đèn; khung 5 × 12 px thì bỏ qua.
 
-Một housing chứa nhiều bóng đèn đỏ–vàng–xanh theo chiều dọc hoặc ngang được tính là **một object**, không tạo một bounding box riêng cho từng bóng đèn.
+Nếu nhận ra đầu đèn và kích thước đủ lớn nhưng không nhìn rõ màu hoặc mũi tên, vẫn gán nhãn. Chọn `unknown` cho thông tin chưa xác định được.
 
-Hai signal head nằm cạnh nhau nhưng có housing riêng phải được annotation thành **hai object riêng**.
+Kích thước được tính trên ảnh gốc. Bạn có thể phóng to để nhìn rõ hơn nhưng không lấy kích thước hiển thị sau khi phóng to, cũng không nới khung cho đủ 5 px. Với đèn bị che hoặc nằm sát mép ảnh, chỉ đo phần còn nhìn thấy.
 
-Ví dụ:
+## 4. Nhãn và thuộc tính
 
-- một housing đỏ–vàng–xanh → 1 object;
-- một housing tín hiệu chung + một housing mũi tên rẽ trái riêng → 2 objects;
-- nhiều signal head treo trên cùng một gantry → mỗi head là 1 object.
+Chỉ dùng nhãn `traffic_light`, với bốn thuộc tính khớp `03_cvat_labels.json`:
 
-Task sử dụng **Shape**, không sử dụng Track.
+| Thuộc tính | Giá trị hợp lệ | Mặc định |
+|---|---|---|
+| `state` | `red`, `yellow`, `green`, `off`, `unknown` | `unknown` |
+| `direction` | `non_directional`, `left`, `right`, `straight`, `unknown` | `unknown` |
+| `relevance` | `relevant`, `not_relevant`, `unknown` | `unknown` |
+| `review` | `none`, `escalate` | `none` |
 
----
+### 4.1. Trạng thái `state`
 
-## 3. Geometry rule
+- `red`, `yellow`, `green`: màu của tín hiệu đang phát sáng rõ.
+- `off`: nhìn rõ mặt đèn và xác nhận không có bóng nào phát sáng trong đầu đèn.
+- `unknown`: không nhìn rõ trạng thái vì đèn nhỏ, mờ, bị lóa, bị che hoặc các dấu hiệu trong ảnh không thống nhất.
 
-Geometry sử dụng **Rectangle / Bounding Box**.
+Một bóng đỏ sáng và các bóng còn lại tắt vẫn là `red`. Không gán `off` vì đầu đèn quá xa, bị che hoặc quay lưng nên không thấy ánh sáng. Không đoán màu chỉ từ vị trí bóng trên/dưới.
 
-Bounding box phải:
+Nếu thấy nhiều màu cùng sáng và không thể chọn một trạng thái phù hợp, chọn `state=unknown`, `review=escalate` để người phụ trách kiểm tra lại.
 
-1. ôm sát **phần traffic signal head/housing nhìn thấy được**;
-2. bao gồm phần visor/bezel gắn trực tiếp với signal head nếu nhìn thấy rõ;
-3. không bao gồm pole, mast, gantry, dây treo hoặc background;
-4. không mở rộng box để “ước lượng” phần object đang bị che.
+### 4.2. Hướng biểu tượng `direction`
 
-### Partial occlusion
+- `non_directional`: nhìn rõ tín hiệu tròn, không có mũi tên.
+- `left`: nhìn rõ mũi tên trái.
+- `right`: nhìn rõ mũi tên phải.
+- `straight`: nhìn rõ mũi tên đi thẳng.
+- `unknown`: không đọc được hình dạng/hướng biểu tượng.
 
-Nếu traffic light bị che một phần nhưng vẫn xác nhận được object:
+Đèn tròn không tự động là `straight`. Thuộc tính này mô tả biểu tượng trên đèn, không phải hướng xe sẽ đi. Không suy hướng từ vị trí đầu đèn, biển báo bên cạnh hoặc hình dạng làn đường.
 
-- vẫn label;
-- box chỉ bao phần object **thực sự nhìn thấy được**;
-- không dùng amodal box để đoán phần bị che.
+Ưu tiên nhìn biểu tượng đang sáng. Với đèn `off`, chỉ chọn hướng khi vẫn nhìn rõ biểu tượng trên mặt đèn; nếu không thì chọn `unknown`. Nếu đèn hiển thị nhiều hướng cùng lúc và không có giá trị phù hợp để chọn, dùng `direction=unknown`, `review=escalate`.
 
-### Object ở mép ảnh
+### 4.3. Mức độ liên quan `relevance`
 
-Nếu traffic light bị cắt bởi mép ảnh nhưng vẫn nhận diện chắc chắn:
+Trước tiên, xem ảnh có cho biết làn xe camera đang đứng được đi thẳng, rẽ trái hay rẽ phải hay không. Sau đó chọn theo một trong hai trường hợp dưới đây.
 
-- vẫn label;
-- box kết thúc tại mép ảnh.
+**Trường hợp 1: Không rõ làn xe được đi hướng nào.**
 
-### Object nhỏ/xa
+Gán `relevant` cho **tất cả đèn đủ điều kiện gán nhãn ở giao lộ hiện tại**, bao gồm đèn tròn, đèn mũi tên và cả đèn dành cho luồng xe khác tại cùng giao lộ. Đây là quy ước chung của dự án để mọi người gán nhãn thống nhất khi ảnh thiếu thông tin về làn đường.
 
-Nếu đủ bằng chứng để xác nhận là traffic light:
+Không cần chọn `unknown` hay yêu cầu kiểm tra lại chỉ vì chưa rõ hướng đi của làn xe. Tuy nhiên, không áp dụng quy ước này cho đèn ở giao lộ phía xa. Nếu không xác định được đèn thuộc giao lộ nào, chọn `relevance=unknown` và đặt `review=escalate` khi cần người phụ trách phân xử.
 
-- vẫn label;
-- các attribute không xác định được dùng `unknown`.
+**Trường hợp 2: Nhìn rõ làn xe được đi hướng nào.**
 
-Nếu không đủ bằng chứng để xác nhận object là traffic light:
+- `relevant`: có bằng chứng đầu đèn có thể điều khiển chuyển động của xe camera.
+- `not_relevant`: có bằng chứng đèn phục vụ luồng khác hoặc giao lộ khác, không điều khiển chuyển động hiện tại của xe camera.
+- `unknown`: chưa đủ bằng chứng phân biệt hai trường hợp trên.
 
-- không tạo speculative bounding box.
+Để xác định, quan sát vạch đường, mũi tên trên làn, vị trí và hướng quay của đầu đèn, cùng bố cục giao lộ. Không chọn relevance chỉ vì đèn đang xanh, đỏ hay nằm bên trái, bên phải ảnh.
 
-Geometry tolerance chính thức sẽ được chốt trong QA plan sau calibration; v1 ưu tiên quy tắc **tight visible box** thay vì một ngưỡng pixel tùy ý chưa được kiểm nghiệm.
+Lưu ý: với quy ước ở trường hợp 1, `relevant` chưa có nghĩa đèn chắc chắn điều khiển xe camera. Bộ nhãn hiện tại không ghi riêng lý do chọn `relevant`, nên chỉ dựa vào thuộc tính này và màu đèn thì chưa đủ để quyết định xe phải đi hay dừng.
 
----
+### 4.4. Yêu cầu kiểm tra lại `review`
 
-## 4. Taxonomy
+- `none`: đã gán nhãn được theo hướng dẫn, kể cả khi có thuộc tính là `unknown` do không nhìn rõ.
+- `escalate`: cần người phụ trách xem lại vì các dấu hiệu trong ảnh không thống nhất, hướng dẫn chưa nói rõ cách xử lý hoặc không có giá trị phù hợp để chọn.
 
-Chỉ sử dụng một class:
+Ví dụ cần escalate: nhiều màu cùng sáng; nhiều hướng đồng thời trên một đầu đèn; chưa thống nhất được đèn thuộc giao lộ hiện tại hay giao lộ phía xa.
 
-`traffic_light`
-
-Mỗi object có 4 attributes.
-
-### `state`
-
-Allowed values:
-
-- `red`
-- `yellow`
-- `green`
-- `unknown`
-
-Chọn màu của tín hiệu đang phát sáng rõ ràng.
-
-Không suy đoán state dựa vào vị trí bóng trong housing khi màu không nhìn rõ.
-
-Nếu glare, blur, occlusion, khoảng cách hoặc điều kiện ánh sáng khiến state không xác định chắc chắn:
-
-`state = unknown`
-
-### `relevance`
-
-Allowed values:
-
-- `relevant`
-- `not_relevant`
-- `unknown`
-
-`relevant` chỉ dùng khi có bằng chứng hình ảnh hợp lý cho thấy signal head có khả năng điều khiển movement của ego vehicle.
-
-`not_relevant` chỉ dùng khi có bằng chứng rõ ràng rằng signal head phục vụ traffic flow khác.
-
-Khi lane association hoặc hướng điều khiển không đủ rõ:
-
-`relevance = unknown`
-
-Không suy relevance từ màu đèn.
-
-### `direction`
-
-Allowed values:
-
-- `straight`
-- `left`
-- `right`
-- `unknown`
-
-Dùng `left` hoặc `right` khi có directional arrow hoặc bằng chứng hình ảnh rõ về movement tương ứng.
-
-Dùng `straight` khi tín hiệu và lane association cho movement đi thẳng được xác định rõ.
-
-Nếu không đủ bằng chứng:
-
-`direction = unknown`
-
-Không suy đoán direction chỉ dựa trên vị trí trái/phải của signal head trong ảnh.
-
-### `review`
-
-Allowed values:
-
-- `none`
-- `escalate`
-
-Dùng `review = escalate` khi case cần QA owner xem lại theo rule ở mục 7.
-
----
-
-## 5. Inclusion / exclusion
-
-### LABEL
-
-Label traffic light khi:
-
-- traffic signal head nhìn thấy trực tiếp;
-- xác nhận được object class;
-- object thuộc vehicle traffic control;
-- kể cả khi state hoặc relevance chưa xác định được.
-
-Một object có thể:
-
-`traffic_light + state=unknown`
-
-và vẫn là annotation hợp lệ.
-
-### IGNORE
-
-Không tạo annotation khi:
-
-- không chắc object có thực sự là traffic light;
-- chỉ nhìn thấy reflection;
-- pedestrian signal;
-- billboard/display;
-- phần object quá nhỏ hoặc mờ để xác nhận class;
-- object nằm ngoài scope.
-
-### Nguyên tắc
-
-**Không dùng `unknown` để thay thế cho việc không xác định được object class.**
-
-`unknown` chỉ áp dụng cho **attribute của một traffic_light đã được xác nhận**.
-
----
-
-## 6. Visibility / occlusion
-
-### Clear visibility
-
-Nếu signal head và tín hiệu nhìn rõ:
-
-- label bình thường;
-- gán các attribute theo bằng chứng ảnh.
-
-### Partial occlusion
-
-Nếu housing bị che một phần nhưng vẫn xác định được:
-
-- label phần nhìn thấy;
-- state/relevance/direction chỉ gán khi có đủ bằng chứng.
-
-### Severe occlusion
-
-Nếu vẫn chắc chắn đó là traffic light nhưng không đọc được state:
-
-`state = unknown`
-
-Nếu không xác định được association với ego:
-
-`relevance = unknown`
-
-Nếu ambiguity có thể ảnh hưởng quyết định downstream:
-
-`review = escalate`
-
-### Small / far object
-
-Không dùng kích thước pixel cố định ở v1.
-
-Quyết định dựa trên hai câu hỏi:
-
-1. Có xác nhận chắc chắn đây là traffic light không?
-2. Có đủ bằng chứng để gán từng attribute không?
-
-Có thể label object nhưng để một hoặc nhiều attribute là `unknown`.
-
-### Glare / night / reflection
-
-Không suy state từ vùng sáng hoặc màu phản chiếu nếu không xác định được lamp đang active.
-
-Khi không chắc chắn:
-
-`state = unknown`
-
----
-
-## 7. Ambiguity / escalation
-
-Mỗi case phải rơi vào một trong bốn hành vi:
-
-### LABEL
-
-Object và các attribute cần thiết đủ bằng chứng.
-
-→ Tạo bounding box và điền attributes.
-
-### IGNORE
-
-Không đủ bằng chứng xác nhận object thuộc class `traffic_light`, hoặc object ngoài scope.
-
-→ Không tạo annotation.
-
-### UNKNOWN
-
-Object chắc chắn là traffic light nhưng một attribute không xác định được.
-
-Ví dụ:
-
-`state = unknown`
-
-hoặc:
-
-`relevance = unknown`
-
-### ESCALATE
-
-Tạo traffic-light annotation và đặt:
-
-`review = escalate`
-
-khi xảy ra ít nhất một trường hợp:
-
-- có từ hai signal head trở lên và không đủ bằng chứng xác định head nào liên quan ego vehicle;
-- lane association mơ hồ và quyết định relevance có thể ảnh hưởng downstream;
-- state có bằng chứng xung đột;
-- rule hiện tại không bao phủ được case;
-- annotator có thể đưa ra từ hai interpretation hợp lý khác nhau.
-
-Annotator **không được tự tạo rule mới**.
-
-### Evidence hierarchy cho ego relevance
-
-Ưu tiên bằng chứng theo thứ tự:
-
-1. lane/movement association nhìn thấy rõ;
-2. directional arrow hoặc lane arrow;
-3. vị trí signal head tương ứng với carriageway/lane của ego;
-4. orientation/facing direction của signal head;
-5. road geometry.
-
-Không dùng:
-
-- màu tín hiệu;
-- cảm giác;
-- giả định luật giao thông không nhìn thấy trong ảnh
-
-để quyết định relevance.
-
-Nếu evidence xung đột:
-
-`relevance = unknown`
-
-và:
-
-`review = escalate`
-
----
-
-## 8. Temporal rule
-
-**Không áp dụng — task sử dụng ảnh tĩnh.**
-
-Mỗi image được annotation độc lập.
-
-Không sử dụng thông tin từ frame trước hoặc frame sau để:
-
-- xác định state;
-- suy relevance;
-- suy direction;
-- quyết định có label object hay không.
-
-Ngay cả khi ảnh đến từ sequence LISA, annotator phải đưa ra quyết định dựa trên **frame hiện tại**.
-
----
-
-## 9. Examples
-
-Các ví dụ chính thức trong guideline v2 sẽ dùng `sample_id` thuộc split `example` hoặc `calibration`; tuyệt đối không dùng ảnh blind.
-
-| Case | Thấy gì | Expected output | Rule |
-|---|---|---|---|
-| E1 | Một vehicle traffic light nhìn rõ, tín hiệu đỏ rõ, association với ego rõ | `traffic_light`; `state=red`; `relevance=relevant`; direction theo evidence; `review=none` | Mục 4 |
-| E2 | Traffic light rõ nhưng ở xa, không đọc chắc màu | Label box; `state=unknown` | Mục 6 |
-| E3 | Hai signal head tại giao lộ, không đủ bằng chứng head nào điều khiển ego | Label các head xác nhận được; `relevance=unknown`; `review=escalate` | Mục 7 |
-| E4 | Housing bị che một phần nhưng vẫn nhận diện được | Bounding box phần visible; attributes theo evidence | Mục 3, 6 |
-| E5 | Vùng sáng/phản chiếu giống đèn nhưng không xác nhận được traffic signal head | IGNORE | Mục 5 |
-| E6 | Signal head rõ ràng hướng sang traffic flow khác | `relevance=not_relevant` | Mục 4, 7 |
-
-Trước calibration, E1–E6 phải được thay/mapping bằng sample_id thật từ `sample_pack.csv`.
-
----
-
-## 10. Common mistakes
-
-### 1. Vẽ từng bóng đèn thành một object
-
-Sai.
-
-Một signal head/housing = một object.
-
-### 2. Box cả pole hoặc gantry
-
-Sai.
-
-Bounding box chỉ bao signal head/housing nhìn thấy được.
-
-### 3. Đoán state từ vị trí bóng
-
-Sai.
-
-Không nhìn chắc màu → `state=unknown`.
-
-### 4. Mặc định traffic light phía trước xe là relevant
-
-Sai.
-
-Phải có evidence về lane/movement association.
-
-### 5. Dùng màu đèn để suy relevance
-
-Sai.
-
-Một đèn xanh không có nghĩa đó là đèn của ego vehicle.
-
-### 6. Dùng `unknown` cho object không xác định được
-
-Sai.
-
-Nếu chưa xác nhận được object là traffic light → IGNORE.
-
-### 7. Gặp ambiguity nhưng tự chọn đáp án “có vẻ hợp lý nhất”
-
-Sai.
-
-Nếu nhiều interpretation hợp lý và ảnh không resolve được:
-
-`unknown + review=escalate`
-
-### 8. Dùng frame trước/sau của LISA để suy frame hiện tại
-
-Sai.
-
-Task này annotation từng image độc lập.
-
-### 9. Tự tạo thêm class hoặc attribute
-
-Sai.
-
-Ontology đã khóa. Case mới phải được ghi nhận để review guideline trước khi thay schema.
-
-### 10. Giải thích rule bằng miệng nhưng guideline không có
-
-Không hợp lệ.
-
-Rule annotator cần sử dụng phải tồn tại trong guideline và có thể được nhóm peer đọc độc lập.
+Không tự thêm nhãn hoặc giá trị mới. Hãy ghi lại vấn đề để người phụ trách kiểm tra. Nếu đối tượng không đủ điều kiện gán nhãn, bỏ qua; khi cần trao đổi, ghi vào phần câu hỏi của nhóm thay vì tạo box chỉ để đặt `review=escalate`.
+
+## 5. Các trường hợp dễ gây nhầm lẫn
+
+Các ví dụ dưới đây giúp bạn chọn cách xử lý trong những tình huống thường gây nhầm lẫn. Chỉ gán nhãn cho đèn đáp ứng mục 3; những thuộc tính không được nêu trong bảng thì điền theo mục 4.
+
+| Mã | Thấy gì | Quyết định |
+|---|---|---|
+| E1 | Đèn tròn đỏ rõ, có bằng chứng điều khiển làn xe | `state=red`, `direction=non_directional`, `relevance=relevant`, `review=none` |
+| E2 | Đầu đèn 5 × 15 px, nhìn thấy điểm sáng đỏ | Bỏ qua; chiều rộng không lớn hơn 5 px |
+| E3 | Vùng sáng 12 × 12 px nhưng không xác nhận được đầu đèn | Bỏ qua; đạt kích thước chưa đủ để gán nhãn |
+| E4 | Đầu đèn 6 × 12 px nhận diện được, màu và biểu tượng không rõ | Gán nhãn; `state=unknown`, `direction=unknown`; không bắt buộc escalate chỉ vì nhỏ |
+| E5 | Không rõ hướng đi của làn xe; nhiều đèn thuộc giao lộ hiện tại | Tất cả đèn đủ điều kiện đều `relevance=relevant`, kể cả đèn cho luồng khác; không bắt buộc escalate vì thiếu hướng làn |
+| E6 | Như E5 nhưng có thêm đèn ở giao lộ phía xa | Đèn giao lộ hiện tại: `relevant`; đèn xác nhận ở giao lộ khác và không điều khiển xe hiện tại: `not_relevant` |
+| E7 | Không rõ đèn thuộc giao lộ hiện tại hay giao lộ phía xa | `relevance=unknown`, `review=escalate` |
+| E8 | Hướng đi của làn xe rõ; đèn rõ ràng phục vụ luồng khác | `relevance=not_relevant`; không áp dụng ngoại lệ E5 |
+| E9 | Đèn bị che một phần hoặc cắt ở mép ảnh | Box phần nhìn thấy; giữ khi nhận diện được và hai cạnh > 5 px, nếu không thì bỏ qua |
+| E10 | Mặt đèn rõ, tất cả bóng không phát sáng | `state=off`; direction theo biểu tượng đọc được, nếu không thì `unknown` |
+| E11 | Nhận diện được đầu đèn nhưng lóa, không đọc được màu | `state=unknown`, không gán `off` |
+| E12 | Đèn tròn xanh và mũi tên trái đỏ có hai vỏ riêng | Hai box; lần lượt `green/non_directional` và `red/left`; relevance theo mục 4.3 |
+| E13 | Nhiều màu sáng trên một đầu đèn gây xung đột | `state=unknown`, `review=escalate` |
+| E14 | Phản chiếu đèn trên kính hoặc đèn cho người đi bộ | Bỏ qua vì ngoài phạm vi |
+
+Khi bổ sung ảnh minh họa, ghi mã ảnh (`sample_id`) từ tập ví dụ (`example`) hoặc tập gán thử để thống nhất cách làm (`calibration`). Không dùng ảnh trong tập đánh giá độc lập (`blind`) làm ví dụ gửi cho nhóm đánh giá chéo.
+
+## 6. Quy tắc cho chuỗi ảnh
+
+Xử lý từng ảnh riêng, kể cả khi các ảnh LISA nằm trong cùng một chuỗi. Chỉ dựa vào ảnh đang xem để gán nhãn. Không xem ảnh trước hoặc sau để đoán màu, hướng mũi tên, mức độ liên quan hay xác nhận một đốm mờ là đèn giao thông.
+
+## 7. Kiểm tra trước khi hoàn thành ảnh
+
+1. Xác nhận đối tượng là đầu đèn dành cho xe trong phạm vi.
+2. Kiểm tra cả chiều rộng và chiều cao box đều > 5 px trên ảnh gốc.
+3. Kiểm tra box ôm sát phần nhìn thấy, mỗi vỏ riêng có một box.
+4. Gán `state`; phân biệt `off` với `unknown`.
+5. Gán `direction` theo biểu tượng; đèn tròn là `non_directional`.
+6. Gán `relevance` theo hai trường hợp ở mục 4.3, chú ý quy ước khi chưa rõ hướng đi của làn xe.
+7. Chọn `review=escalate` nếu cần người phụ trách xem lại. Kiểm tra các thuộc tính trước khi hoàn thành, tránh bỏ sót vì đã có giá trị mặc định.

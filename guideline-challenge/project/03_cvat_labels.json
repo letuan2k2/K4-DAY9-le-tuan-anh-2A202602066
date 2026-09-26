@@ -13,6 +13,7 @@
           "red",
           "yellow",
           "green",
+          "off",
           "unknown"
         ]
       },
@@ -33,9 +34,10 @@
         "input_type": "select",
         "default_value": "unknown",
         "values": [
-          "straight",
+          "non_directional",
           "left",
           "right",
+          "straight",
           "unknown"
         ]
       },

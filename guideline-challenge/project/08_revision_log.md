@@ -1,10 +1,20 @@
-# Revision log
+# Nhật ký điều chỉnh guideline
 
-Guideline v1 = bản nháp đầu; v2 = sau calibration nội bộ; v3 = sau blind handoff. Mỗi lần tăng `Version` trong
-`02_guideline.md`, thêm một hoặc nhiều dòng vào bảng: đổi gì và vì sao, kèm bằng chứng (sample_id, dòng
-calibration report, câu hỏi trong clarification log, feedback của peer).
+Mỗi lần tăng Version trong `02_guideline.md`, ghi thay đổi, lý do và bằng chứng vào bảng. Cột Version dùng `v1`, `v2`, `v3` để tương thích với `make status`.
 
-Cột Version ghi dạng `v1`, `v2`, `v3` — `make status` tìm dòng bảng có `v2` và dòng có `v3`.
+Thông thường v2 ghi nhận điều chỉnh sau calibration nội bộ, v3 sau blind handoff. Bản v2 này được viết theo issue và quyết định của người dùng trong cuộc trao đổi ngày 2026-09-26. Chưa có kết quả calibration hoặc sample_id cụ thể được cung cấp cho các thay đổi dưới đây; các dòng này không xác nhận calibration đã hoàn thành.
 
 | Version | Đổi gì | Vì sao | Bằng chứng |
 |---|---|---|---|
+| v1 | Bản nháp ban đầu: một nhãn traffic_light; chưa có ngưỡng pixel cố định; relevance không rõ thì unknown. | Thiết lập quy tắc ban đầu cho ảnh tĩnh. | Nội dung guideline v1 trước lần sửa này. |
+| v2 | Viết lại bằng tiếng Việt, giải thích thuật ngữ và thêm trình tự kiểm tra cuối ảnh. | Giúp người gán nhãn áp dụng độc lập. | Yêu cầu người dùng ngày 2026-09-26 “Dễ hiểu, tiếng Việt”; mục 1, 7 v2. |
+| v2 | Chỉ giữ đối tượng khi cả chiều rộng và chiều cao box phần nhìn thấy > 5 px trên ảnh gốc, đồng thời nhận diện được là đầu đèn. Đúng 5 px bị loại. | Thống nhất xử lý đối tượng quá nhỏ/mờ; tránh hiểu đạt kích thước là đủ hoặc đo sau khi phóng to. | Đề xuất người dùng “trên các cạnh trên pixel 5px”, được cụ thể hóa thành cả hai cạnh > 5 px; mục 3, E2–E4, E9. Ngưỡng chưa được kiểm chứng bằng calibration. |
+| v2 | Khi không rõ hướng đi được phép của làn xe, gán relevant cho tất cả đèn đủ điều kiện thuộc giao lộ hiện tại, kể cả đèn cho luồng khác. Quy tắc này ưu tiên hơn phân loại theo luồng. | Thống nhất trường hợp nhiều đèn tại giao lộ nhưng thiếu thông tin hướng làn. | Đề xuất người dùng “đánh relevant hết cho các đèn ở ngã tư hiện tại khi không rõ xe được đi những hướng nào”; mục 4.3, E5. |
+| v2 | Giới hạn ngoại lệ trong giao lộ hiện tại; không rõ giao lộ của đèn thì unknown, escalate nếu cần phân xử. Khi hướng làn rõ, phân loại theo bằng chứng. | Không mở rộng ngoại lệ sang mọi đèn trong ảnh; phân biệt thiếu hướng làn với thiếu thông tin giao lộ. | Phạm vi “ngã tư hiện tại” trong yêu cầu; mục 4.3, E6–E8. |
+| v2 | Bỏ yêu cầu tự động escalate vì nhiều đèn và chưa rõ hướng làn khi ngoại lệ đã giải quyết được. Giữ escalation cho xung đột hoặc vấn đề chưa có quy tắc. | Tránh mâu thuẫn giữa relevance mới và escalation của v1. | Đối chiếu mục 7 v1 với quy tắc mới; mục 4.4, E5, E7, E13 v2. |
+| v2 | Bổ sung off, phân biệt toàn bộ đầu đèn tắt với trạng thái không đọc được. | Đồng bộ schema đã được cập nhật; tránh gán đèn xa/mờ là tắt. | 03_cvat_labels.json hiện tại và yêu cầu sửa schema trong cuộc trao đổi; mục 4.1, E10–E11. |
+| v2 | Bổ sung non_directional; direction mô tả biểu tượng; straight chỉ khi nhìn rõ mũi tên đi thẳng. | Đồng bộ schema; tránh suy đèn tròn là đi thẳng hoặc suy hướng từ làn. | 03_cvat_labels.json hiện tại và quyết định schema trong cuộc trao đổi; mục 4.2, E1, E12. |
+| v2 | Làm rõ relevant v2 bao gồm đèn được chọn theo quy ước cùng giao lộ; schema không tách lý do gán. Không dùng riêng relevance và màu để suy quyết định lái xe. | Phản ánh đúng ý nghĩa sau khi mở rộng relevance, tránh hiểu là quan hệ đèn–làn đã được xác nhận. | Hệ quả của quy tắc do người dùng yêu cầu; đoạn “Ý nghĩa khi sử dụng dữ liệu” ở mục 4.3. |
+| v2 | Thêm 14 tình huống minh họa; giữ quy tắc gán từng ảnh độc lập. | Bao phủ kích thước biên, mờ, che khuất, mép ảnh, nhiều giao lộ, đèn tắt, lóa và xung đột. | Mục 5–6 v2; đây là ví dụ quy tắc, chưa gắn sample_id hoặc kết quả calibration. |
+| v2 | Giới hạn nguồn dữ liệu của project ở 30 frame LISA và nêu rõ nguy cơ rò rỉ thời gian giữa các split. | Đồng bộ với lựa chọn dataset chính thức của Team05 và tránh diễn giải kết quả blind vượt quá phạm vi một chuỗi ảnh. | `00_team.md`, `01_problem_statement.md` và yêu cầu người dùng chọn LISA. |
+| v2 | Hoàn thiện ontology, kế hoạch QA và 10 edge-case card gắn với các sample LISA. | Làm rõ cách schema được dùng, cách đo chất lượng và cách xử lý những trường hợp dễ bất đồng. | `03_ontology_and_cvat_setup.md`, `05_qa_plan.md`, `04_edge_cases/edge_case_cards.md`. |
