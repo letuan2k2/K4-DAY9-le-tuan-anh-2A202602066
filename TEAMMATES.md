@@ -10,7 +10,7 @@
 |  1  | **Lê Việt Anh** (Nhóm trưởng) | 2A202602111 | [levietanhoffice](https://github.com/levietanhoffice) | Traffic Light (Đèn giao thông)     | [Link repo](https://github.com/levietanhoffice/K4-L2-DAY09-LeVietAnh-RoadElements)                       |
 |  2  | **Trần Minh Nhật**            | 2A202602079 | [tmnhat](https://github.com/tmnhat)                   | Lane (Vạch kẻ đường)               | [Link repo](https://github.com/tmnhat/K4-L2-DAY09-Nhom05-RoadElements)                                   |
 |  3  | **Võ Trọng Nghĩa**            | 2A202602072 | [mbanghia2009](https://github.com/mbanghia2009)       | Drivable Area (Vùng lái xe)        | [Link repo](https://github.com/nghiaai-lab/K4-L2-DAY09-Nhom05-RoadElements-VoTrongNghia-2A202602072.git) |
-|  4  | **Lê Tuấn Anh**               | 2A202602066 | [letuan2k2](https://github.com/letuan2k2)             | Traffic Sign (Biển báo giao thông) | https://github.com/letuan2k2/K4-DAY9-le-tuan-anh-2A202602066                                             |
+|  4  | **Lê Tuấn Anh**               | 2A202602066 | [letuan2k2](https://github.com/letuan2k2)             | Traffic Sign (Biển báo giao thông) | [Link repo](https://github.com/letuan2k2/K4-DAY9-le-tuan-anh-2A202602066)                                |
 
 ---
 
